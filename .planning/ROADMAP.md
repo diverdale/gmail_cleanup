@@ -44,7 +44,12 @@ Plans:
   2. `gmail-clean --before 2024-01-01` runs without error and reports how many emails match (dry-run output)
   3. Running the tool without `--execute` makes zero write/delete API calls (verifiable via API request logging)
   4. Passing `--execute` displays "Found N emails. Delete permanently? [y/N]" and cancels cleanly on "N" or Ctrl-C
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — TDD date utilities: months_ago_to_cutoff, parse_date_to_cutoff, build_gmail_query with tests
+- [ ] 02-02-PLAN.md — count_messages() in gmail_client.py and real CLI in main.py (--older-than, --before, --execute)
+- [ ] 02-03-PLAN.md — Human-verify dry-run output and --execute confirmation gate against live Gmail
 
 ### Phase 3: Message Discovery
 **Goal**: The tool finds every email matching the filter — no silent truncation — and the date cutoff is timezone-correct
@@ -74,6 +79,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/3 | Complete    | 2026-02-18 |
-| 2. CLI and Dry-run | 0/TBD | Not started | - |
+| 2. CLI and Dry-run | 0/3 | Not started | - |
 | 3. Message Discovery | 0/TBD | Not started | - |
 | 4. Deletion | 0/TBD | Not started | - |
