@@ -28,7 +28,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. First run opens a browser OAuth prompt; second run completes silently (token reused from token.json)
   3. The authenticated service object can successfully call a Gmail API endpoint (confirmed by listing one message)
   4. The project has a working uv environment with dependencies installable from pyproject.toml
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Protect credentials, fix .python-version, initialize uv project with all dependencies
+- [ ] 01-02-PLAN.md — Create gmail_cleanup package with auth.py (OAuth flow) and stub modules
+- [ ] 01-03-PLAN.md — Human-verify OAuth browser flow, token caching, and Gmail API connection
 
 ### Phase 2: CLI and Dry-run
 **Goal**: User can invoke the tool with age or date arguments and see what would be deleted — without any deletion occurring by default
@@ -68,7 +73,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/3 | Not started | - |
 | 2. CLI and Dry-run | 0/TBD | Not started | - |
 | 3. Message Discovery | 0/TBD | Not started | - |
 | 4. Deletion | 0/TBD | Not started | - |
