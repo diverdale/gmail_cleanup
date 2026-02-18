@@ -1,0 +1,17 @@
+# OAuth credentials — NEVER commit these
+credentials.json
+token.json
+client_id
+client_secret
+client_secret*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+dist/
+.uv/
+
+# Environment
+.env
