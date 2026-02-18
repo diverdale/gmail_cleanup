@@ -1,0 +1,21 @@
+[project]
+name = "gmail-cleanup"
+version = "0.1.0"
+description = "Delete old Gmail messages reliably from the command line"
+requires-python = ">=3.12"
+dependencies = [
+    "google-api-python-client==2.190.0",
+    "google-auth==2.48.0",
+    "google-auth-oauthlib==1.2.4",
+    "google-auth-httplib2",
+    "typer==0.24.0",
+    "rich==14.1.0",
+    "python-dateutil",
+]
+
+[project.scripts]
+gmail-clean = "gmail_cleanup.main:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
