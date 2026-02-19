@@ -4,6 +4,7 @@ from typing import Optional
 
 import typer
 from googleapiclient.errors import HttpError
+from rich.console import Console
 
 from gmail_cleanup.auth import build_gmail_service
 from gmail_cleanup.date_utils import (
@@ -11,7 +12,9 @@ from gmail_cleanup.date_utils import (
     months_ago_to_cutoff,
     parse_date_to_cutoff,
 )
-from gmail_cleanup.gmail_client import count_messages
+from gmail_cleanup.gmail_client import list_message_ids
+
+console = Console()
 
 app = typer.Typer(
     name="gmail-clean",
@@ -78,32 +81,53 @@ def main(
         cutoff = parse_date_to_cutoff(before)  # type: ignore[arg-type]
 
     query = build_gmail_query(cutoff)
+    cutoff_display = cutoff.strftime("%Y-%m-%d %H:%M:%S %Z").strip()
 
-    # Authenticate and count matching messages
+    # Authenticate and fetch matching message IDs
     try:
         service = build_gmail_service()
     except FileNotFoundError as exc:
         typer.echo(f"Error: credentials.json not found — {exc}", err=True)
         raise typer.Exit(code=1)
 
+    message_ids: list[str] = []
     try:
-        count = count_messages(service, query)
-    except HttpError as exc:
-        typer.echo(f"Gmail API error: {exc}", err=True)
-        raise typer.Exit(code=1)
+        with console.status("Scanning... 0 emails found", spinner="dots") as status:
+            # Inline pagination — main.py drives the loop so it can update the spinner per page
+            page_token = None
+            page_num = 0
+            while True:
+                page_num += 1
+                kwargs: dict = {"userId": "me", "q": query, "maxResults": 500}
+                if page_token:
+                    kwargs["pageToken"] = page_token
+                try:
+                    result = service.users().messages().list(**kwargs).execute()
+                except HttpError as exc:
+                    typer.echo(
+                        f"Error: Failed to fetch page {page_num} of results. {exc}. Try again.",
+                        err=True,
+                    )
+                    raise typer.Exit(code=1)
+                message_ids.extend(m["id"] for m in result.get("messages", []))
+                status.update(f"Scanning... {len(message_ids):,} emails found")
+                page_token = result.get("nextPageToken")
+                if not page_token:
+                    break
+    except typer.Exit:
+        raise  # re-raise Exit so typer handles it
+
+    count = len(message_ids)
 
     if not execute:
         # Dry-run: show count and exit — zero write/delete API calls made
-        typer.echo(
-            f"[DRY RUN] Found ~{count} emails matching '{query}' "
-            f"(approximate, up to 500 shown)."
-        )
+        console.print(f"[bold]Found {count:,} emails[/bold] before {cutoff_display}.")
         typer.echo("Run with --execute to delete permanently.")
         raise typer.Exit(code=0)
 
     # --execute path: show count and require explicit confirmation
     # typer.confirm() appends " [y/N]: " automatically — do not include in message
-    typer.echo(f"Found ~{count} emails matching '{query}' (approximate, up to 500 shown).")
+    typer.echo(f"Found {count:,} emails before {cutoff_display}.")
     try:
         confirmed = typer.confirm("Delete permanently")
     except (KeyboardInterrupt, typer.Abort):
