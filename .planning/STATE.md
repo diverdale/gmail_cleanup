@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** Delete old Gmail messages reliably from the command line — with a dry-run preview before committing to deletion.
-**Current focus:** Phase 3 — Pagination and List (Plan 03-02 complete)
+**Current focus:** Phase 3 — Pagination and List (Plan 03-03 complete — Phase 3 done)
 
 ## Current Position
 
-Phase: 3 of 4 in progress (Message Discovery)
-Plan: 2 of 3 in phase 03 complete (03-02 list_message_ids pagination TDD)
-Status: Phase 3 in progress — 03-02 done, 03-03 next (query builder upgrade / main.py integration)
-Last activity: 2026-02-19 — Plan 03-02 complete: list_message_ids() with nextPageToken loop, 7 tests pass (RED+GREEN TDD)
+Phase: 3 of 4 complete (Message Discovery)
+Plan: 3 of 3 in phase 03 complete (03-03 main.py integration with spinner and exact count)
+Status: Phase 3 complete — all plans done; Phase 4 (deletion) is next
+Last activity: 2026-02-19 — Plan 03-03 complete: main.py wired with paginated fetch, Rich spinner, exact count display, local-timezone timestamp; verified live against Gmail
 
-Progress: [#######░░░] 70%
+Progress: [##########] 100% Phase 3 (9 of 10 total plans complete)
 
 ## Performance Metrics
 
@@ -29,10 +29,10 @@ Progress: [#######░░░] 70%
 |-------|-------|-------|----------|
 | 01-foundation | 3 | 11 min | 4 min |
 | 02-cli-and-dry-run | 3 | 8 min | 2.7 min |
-| 03-message-discovery | 2 | 2 min | 1 min |
+| 03-message-discovery | 3 | ~17 min | ~5.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (1 min), 02-02 (2 min), 02-03 (~5 min), 03-01 (1 min), 03-02 (1 min)
+- Last 5 plans: 02-02 (2 min), 02-03 (~5 min), 03-01 (1 min), 03-02 (1 min), 03-03 (~15 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -63,6 +63,9 @@ Recent decisions affecting current work:
 - [03-02]: list_message_ids() replaces both count_messages() and list_messages() stub — callers use len() for count
 - [03-02]: HttpError kept as noqa re-export in gmail_client.py — Phase 4 callers import it from here
 - [03-02]: TDD RED phase was ImportError (function not found) — valid RED, plan executed exactly as specified
+- [03-03]: Inline pagination loop in main.py (not delegating to list_message_ids) so spinner can update per page
+- [03-03]: console.print() with Rich markup for dry-run count line; typer.echo() for plain follow-up line
+- [03-03]: cutoff_display built after both --older-than and --before branches — single strftime call covers both paths
 - [Phase 02-cli-and-dry-run]: count_messages() uses maxResults=500 single-call — approximate count, Phase 3 adds full pagination
 - [Phase 02-cli-and-dry-run]: validate_date() is a Typer callback on --before, triggers exit 2 (Typer protocol) not exit 1
 - [Phase 02-cli-and-dry-run]: Cancel via N confirmation or Ctrl-C exits 0 — user intent, not an error condition
@@ -80,5 +83,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 03-02-PLAN.md — list_message_ids() TDD complete: 7 tests pass (RED+GREEN), count_messages removed
+Stopped at: Completed 03-03-PLAN.md — Phase 3 complete: main.py wired with paginated fetch, Rich spinner, exact count, local-tz timestamp; all 4 live tests passed
 Resume file: None
