@@ -19,3 +19,8 @@ gmail-clean = "gmail_cleanup.main:app"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
