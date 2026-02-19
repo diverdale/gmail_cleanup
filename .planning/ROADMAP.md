@@ -74,7 +74,11 @@ Plans:
   2. A 429 or 5xx response triggers automatic retry with exponential backoff — the run does not fail
   3. After completion, tool prints count of deleted emails and elapsed time
   4. Final deleted count matches the count shown during the pre-deletion dry-run for the same query
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — TDD: implement batch_delete() in cleaner.py with chunked batchDelete, exponential backoff retry, and Rich progress bar
+- [ ] 04-02-PLAN.md — Wire main.py: call batch_delete(), add elapsed timer to dry-run and execute paths, human verification
 
 ## Progress
 
@@ -86,4 +90,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 0/3 | Complete    | 2026-02-18 |
 | 2. CLI and Dry-run | 0/3 | Complete    | 2026-02-19 |
 | 3. Message Discovery | 0/3 | Complete    | 2026-02-19 |
-| 4. Deletion | 0/TBD | Not started | - |
+| 4. Deletion | 0/2 | Not started | - |
