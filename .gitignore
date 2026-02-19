@@ -13,11 +13,10 @@ __pycache__/
 dist/
 .uv/
 uv.lock
-.gitignore
+.python-version
 
 # Claude
-.planning/
-
+.planning
 
 # Environment
 .env
