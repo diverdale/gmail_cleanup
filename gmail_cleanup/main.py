@@ -1,5 +1,6 @@
 """Gmail Cleanup CLI — delete old Gmail messages from the command line."""
 
+import time
 from typing import Optional
 
 import typer
@@ -7,6 +8,7 @@ from googleapiclient.errors import HttpError
 from rich.console import Console
 
 from gmail_cleanup.auth import build_gmail_service
+from gmail_cleanup.cleaner import batch_delete
 from gmail_cleanup.date_utils import (
     build_gmail_query,
     months_ago_to_cutoff,
@@ -90,6 +92,7 @@ def main(
         typer.echo(f"Error: credentials.json not found — {exc}", err=True)
         raise typer.Exit(code=1)
 
+    start_time = time.monotonic()
     message_ids: list[str] = []
     try:
         with console.status("Scanning... 0 emails found", spinner="dots") as status:
@@ -120,8 +123,11 @@ def main(
     count = len(message_ids)
 
     if not execute:
-        # Dry-run: show count and exit — zero write/delete API calls made
-        console.print(f"[bold]Found {count:,} emails[/bold] before {cutoff_display}.")
+        elapsed = time.monotonic() - start_time
+        console.print(
+            f"[bold]Found {count:,} emails[/bold] before {cutoff_display} "
+            f"[dim]({elapsed:.1f}s, dry run)[/dim]"
+        )
         typer.echo("Run with --execute to delete permanently.")
         raise typer.Exit(code=0)
 
@@ -138,9 +144,12 @@ def main(
         typer.echo("Deletion cancelled.")
         raise typer.Exit(code=0)
 
-    # Deletion stub — Phase 4 implements batch_delete
-    typer.echo("Deletion not yet implemented. (Phase 4)")
-    raise typer.Exit(code=0)
+    deleted = batch_delete(service, message_ids)
+    elapsed = time.monotonic() - start_time
+    console.print(
+        f"[bold green]Deleted {deleted:,} emails[/bold green] "
+        f"in [bold]{elapsed:.1f}s[/bold]."
+    )
 
 
 if __name__ == "__main__":
