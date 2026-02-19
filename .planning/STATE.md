@@ -2,19 +2,19 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-18)
+See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** Delete old Gmail messages reliably from the command line — with a dry-run preview before committing to deletion.
-**Current focus:** Phase 3 — Pagination and List (Phase 2 complete)
+**Current focus:** Phase 3 — Pagination and List (Plan 03-01 complete)
 
 ## Current Position
 
-Phase: 2 of 4 complete (CLI and Dry-run) — Phase 3 next
-Plan: 3 of 3 in phase 02 complete (02-03 human verification passed)
-Status: Phase 2 complete, Phase 3 not started
-Last activity: 2026-02-18 — Plan 02-03 complete: all 4 live CLI tests passed (dry-run + --execute confirmation gate verified against real Gmail API)
+Phase: 3 of 4 in progress (Message Discovery)
+Plan: 1 of N in phase 03 complete (03-01 TDD complete)
+Status: Phase 3 in progress — 03-01 done, next plan TBD
+Last activity: 2026-02-19 — Plan 03-01 complete: date_utils upgraded to local-tz cutoffs and before:{epoch} Gmail queries
 
-Progress: [######░░░░] 60%
+Progress: [#######░░░] 65%
 
 ## Performance Metrics
 
@@ -29,9 +29,10 @@ Progress: [######░░░░] 60%
 |-------|-------|-------|----------|
 | 01-foundation | 3 | 11 min | 4 min |
 | 02-cli-and-dry-run | 3 | 8 min | 2.7 min |
+| 03-message-discovery | 1 | 1 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-03 (5 min), 02-01 (1 min), 02-02 (2 min), 02-03 (~5 min)
+- Last 5 plans: 01-03 (5 min), 02-01 (1 min), 02-02 (2 min), 02-03 (~5 min), 03-01 (1 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -55,6 +56,10 @@ Recent decisions affecting current work:
 - [02-01]: pytest added as [dependency-groups] dev in pyproject.toml — installed with uv sync --dev
 - [02-01]: relativedelta used for months_ago_to_cutoff — calendar-correct month arithmetic, not timedelta(days=30)
 - [02-01]: build_gmail_query uses before:YYYY/MM/DD slash format now — Phase 3 will upgrade to epoch timestamp
+- [03-01]: parse_date_to_cutoff returns 23:59:59 local tz (not UTC midnight) — end-of-day semantics eliminate tz boundary ambiguity
+- [03-01]: build_gmail_query emits before:{epoch} integer format — eliminates date-string tz ambiguity for Gmail queries
+- [03-01]: months_ago_to_cutoff uses datetime.now().astimezone() — local tz, consistent with parse_date_to_cutoff
+- [03-01]: timezone import removed from date_utils.py — astimezone() with no args attaches local tz
 - [Phase 02-cli-and-dry-run]: count_messages() uses maxResults=500 single-call — approximate count, Phase 3 adds full pagination
 - [Phase 02-cli-and-dry-run]: validate_date() is a Typer callback on --before, triggers exit 2 (Typer protocol) not exit 1
 - [Phase 02-cli-and-dry-run]: Cancel via N confirmation or Ctrl-C exits 0 — user intent, not an error condition
@@ -71,6 +76,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-18
-Stopped at: Completed 02-03-PLAN.md — Phase 2 human verification complete; all 4 live CLI tests passed
+Last session: 2026-02-19
+Stopped at: Completed 03-01-PLAN.md — date_utils upgraded: local-tz cutoffs, before:{epoch} Gmail queries, all 13 tests pass
 Resume file: None
