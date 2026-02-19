@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Secure project setup with working OAuth authentication (completed 2026-02-18)
 - [x] **Phase 2: CLI and Dry-run** - Full CLI surface with dry-run as default and confirmation gate (completed 2026-02-19)
-- [ ] **Phase 3: Message Discovery** - Correct pagination and date-to-query translation
+- [x] **Phase 3: Message Discovery** - Correct pagination and date-to-query translation (completed 2026-02-19)
 - [ ] **Phase 4: Deletion** - Live batch deletion with retry, progress display, and summary
 
 ## Phase Details
@@ -85,5 +85,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/3 | Complete    | 2026-02-18 |
 | 2. CLI and Dry-run | 0/3 | Complete    | 2026-02-19 |
-| 3. Message Discovery | 0/3 | Not started | - |
+| 3. Message Discovery | 0/3 | Complete    | 2026-02-19 |
 | 4. Deletion | 0/TBD | Not started | - |
