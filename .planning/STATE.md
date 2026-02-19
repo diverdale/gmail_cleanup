@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-18)
 ## Current Position
 
 Phase: 2 of 4 (CLI and Dry-run)
-Plan: 1 of 3 in current phase (plan 02-01 complete)
+Plan: 2 of 3 in current phase (plan 02-02 complete)
 Status: Phase 2 in progress
-Last activity: 2026-02-19 — Plan 02-01 complete: date utility functions with TDD (12 tests, pytest dev dependency)
+Last activity: 2026-02-19 — Plan 02-02 complete: real CLI (--older-than, --before, --execute) and count_messages() implemented
 
-Progress: [####░░░░░░] 40%
+Progress: [#####░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 3 min
-- Total execution time: 0.13 hours
+- Total execution time: 0.16 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 3 | 11 min | 4 min |
-| 02-cli-and-dry-run | 1 | 1 min | 1 min |
+| 02-cli-and-dry-run | 2 | 3 min | 1.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (1 min), 01-03 (5 min), 02-01 (1 min)
+- Last 5 plans: 01-02 (1 min), 01-03 (5 min), 02-01 (1 min), 02-02 (2 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -55,6 +55,9 @@ Recent decisions affecting current work:
 - [02-01]: pytest added as [dependency-groups] dev in pyproject.toml — installed with uv sync --dev
 - [02-01]: relativedelta used for months_ago_to_cutoff — calendar-correct month arithmetic, not timedelta(days=30)
 - [02-01]: build_gmail_query uses before:YYYY/MM/DD slash format now — Phase 3 will upgrade to epoch timestamp
+- [Phase 02-cli-and-dry-run]: count_messages() uses maxResults=500 single-call — approximate count, Phase 3 adds full pagination
+- [Phase 02-cli-and-dry-run]: validate_date() is a Typer callback on --before, triggers exit 2 (Typer protocol) not exit 1
+- [Phase 02-cli-and-dry-run]: Cancel via N confirmation or Ctrl-C exits 0 — user intent, not an error condition
 
 ### Pending Todos
 
@@ -68,5 +71,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 02-01-PLAN.md — date utility functions TDD complete, 12 tests passing, pytest installed
+Stopped at: Completed 02-02-PLAN.md — real CLI (--older-than, --before, --execute) and count_messages() implemented
 Resume file: None
