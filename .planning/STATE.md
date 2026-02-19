@@ -5,32 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-02-18)
 
 **Core value:** Delete old Gmail messages reliably from the command line — with a dry-run preview before committing to deletion.
-**Current focus:** Phase 1 complete — ready for Phase 2
+**Current focus:** Phase 2 — CLI and dry-run implementation
 
 ## Current Position
 
-Phase: 1 of 4 (Foundation) — COMPLETE
-Plan: 3 of 3 in current phase (all plans complete)
-Status: Phase 1 complete
-Last activity: 2026-02-18 — Plan 01-03 complete: OAuth browser flow and token caching verified live against Gmail API
+Phase: 2 of 4 (CLI and Dry-run)
+Plan: 1 of 3 in current phase (plan 02-01 complete)
+Status: Phase 2 in progress
+Last activity: 2026-02-19 — Plan 02-01 complete: date utility functions with TDD (12 tests, pytest dev dependency)
 
-Progress: [###░░░░░░░] 30%
+Progress: [####░░░░░░] 40%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 3 min
-- Total execution time: 0.12 hours
+- Total execution time: 0.13 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 3 | 11 min | 4 min |
+| 02-cli-and-dry-run | 1 | 1 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (1 min), 01-03 (5 min)
+- Last 5 plans: 01-01 (5 min), 01-02 (1 min), 01-03 (5 min), 02-01 (1 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -51,6 +52,9 @@ Recent decisions affecting current work:
 - [Phase 01-02]: TOKEN_PATH uses XDG config dir (~/.config/gmail-clean/token.json) — not CWD-relative
 - [Phase 01-02]: CREDENTIALS_PATH derived from Path(__file__) not os.getcwd() — ensures correct resolution
 - [Phase 01-03]: GCP consent screen must be non-Testing mode before OAuth — verified live; Testing tokens expire silently after 7 days
+- [02-01]: pytest added as [dependency-groups] dev in pyproject.toml — installed with uv sync --dev
+- [02-01]: relativedelta used for months_ago_to_cutoff — calendar-correct month arithmetic, not timedelta(days=30)
+- [02-01]: build_gmail_query uses before:YYYY/MM/DD slash format now — Phase 3 will upgrade to epoch timestamp
 
 ### Pending Todos
 
@@ -63,6 +67,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-18
-Stopped at: Completed 01-03-PLAN.md — Phase 1 Foundation complete: OAuth browser flow verified live, token cached, API access confirmed
+Last session: 2026-02-19
+Stopped at: Completed 02-01-PLAN.md — date utility functions TDD complete, 12 tests passing, pytest installed
 Resume file: None
