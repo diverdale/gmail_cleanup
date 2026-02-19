@@ -58,7 +58,12 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. Dry-run count for a mailbox with >500 matching emails matches the count shown in Gmail web UI for the same query
   2. `--older-than 6` and `--before YYYY-MM-DD` produce a Gmail query using a Unix epoch timestamp (not a formatted date string)
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — TDD: upgrade date_utils.py to local-timezone end-of-day cutoffs and epoch-based Gmail queries
+- [ ] 03-02-PLAN.md — TDD: replace count_messages() with list_message_ids() using full nextPageToken pagination
+- [ ] 03-03-PLAN.md — Wire main.py: paginated fetch, Rich spinner, exact count display, human verification
 
 ### Phase 4: Deletion
 **Goal**: User can permanently delete matched emails in bulk, with progress shown during the run and a count summary at the end
@@ -80,5 +85,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/3 | Complete    | 2026-02-18 |
 | 2. CLI and Dry-run | 0/3 | Complete    | 2026-02-19 |
-| 3. Message Discovery | 0/TBD | Not started | - |
+| 3. Message Discovery | 0/3 | Not started | - |
 | 4. Deletion | 0/TBD | Not started | - |
