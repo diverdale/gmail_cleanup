@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** Delete old Gmail messages reliably from the command line — with a dry-run preview before committing to deletion.
-**Current focus:** Phase 4 — Deletion (Plan 04-01 complete — batch_delete implemented)
+**Current focus:** Phase 4 — Deletion COMPLETE (all plans done — tool is fully functional end-to-end)
 
 ## Current Position
 
-Phase: 4 of 4 in progress (Deletion)
-Plan: 1 of 1 in phase 04 complete (04-01 batch_delete with chunked batchDelete, retry, and progress)
-Status: Phase 4 in progress — plan 04-01 done; remaining Phase 4 plans next
-Last activity: 2026-02-19 — Plan 04-01 complete: batch_delete() implemented with 500-ID chunks, exponential backoff retry on {429,500,502,503,504}, Rich progress bar; all 6 unit tests pass, full suite 26/26
+Phase: 4 of 4 COMPLETE (Deletion)
+Plan: 2 of 2 in phase 04 complete (04-02 main.py wired to batch_delete with elapsed timer, live-verified)
+Status: ALL PHASES COMPLETE — project done
+Last activity: 2026-02-19 — Plan 04-02 complete: batch_delete() wired into main.py with time.monotonic() elapsed timer; dry-run and execute paths both show elapsed time; live deletion verified end-to-end (4 test cases passed)
 
-Progress: [##########] 100% Phase 4 Plan 1 (10 of 10 total plans complete)
+Progress: [##########] 100% Phase 4 Plan 2 (11 of 11 total plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 11
 - Average duration: 2 min
-- Total execution time: 0.25 hours
+- Total execution time: ~0.35 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [##########] 100% Phase 4 Plan 1 (10 of 10 total plans complete)
 | 01-foundation | 3 | 11 min | 4 min |
 | 02-cli-and-dry-run | 3 | 8 min | 2.7 min |
 | 03-message-discovery | 3 | ~17 min | ~5.7 min |
-| 04-deletion | 1 | 1 min | 1 min |
+| 04-deletion | 2 | ~6 min | ~3 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (~5 min), 03-01 (1 min), 03-02 (1 min), 03-03 (~15 min), 04-01 (1 min)
+- Last 5 plans: 03-02 (1 min), 03-03 (~15 min), 04-01 (1 min), 04-02 (~5 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -75,6 +75,8 @@ Recent decisions affecting current work:
 - [04-01]: Sleep AFTER failure, not before first attempt — avoids unnecessary delay on success path
 - [04-01]: batchDelete return value is None — not inspected; deleted count tracked via len(chunk) per successful execute() call
 - [04-01]: int(exc.resp.status) cast is mandatory — httplib2 returns resp.status as a string, numeric comparison requires explicit cast
+- [04-02]: start_time placed before scan loop — elapsed covers full operation (scan + delete), not just deletion alone
+- [04-02]: batch_delete() return value used directly in output line — count consistency (DEL-04) guaranteed by design
 
 ### Pending Todos
 
@@ -88,5 +90,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 04-01-PLAN.md — batch_delete() implemented with chunked batchDelete, exponential backoff retry, Rich progress bar; 26/26 tests pass
+Stopped at: Completed 04-02-PLAN.md — main.py wired to batch_delete() with elapsed timer; all four live test cases verified; project complete
 Resume file: None
