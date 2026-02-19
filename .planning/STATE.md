@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** Delete old Gmail messages reliably from the command line — with a dry-run preview before committing to deletion.
-**Current focus:** Phase 3 — Pagination and List (Plan 03-01 complete)
+**Current focus:** Phase 3 — Pagination and List (Plan 03-02 complete)
 
 ## Current Position
 
 Phase: 3 of 4 in progress (Message Discovery)
-Plan: 1 of N in phase 03 complete (03-01 TDD complete)
-Status: Phase 3 in progress — 03-01 done, next plan TBD
-Last activity: 2026-02-19 — Plan 03-01 complete: date_utils upgraded to local-tz cutoffs and before:{epoch} Gmail queries
+Plan: 2 of 3 in phase 03 complete (03-02 list_message_ids pagination TDD)
+Status: Phase 3 in progress — 03-02 done, 03-03 next (query builder upgrade / main.py integration)
+Last activity: 2026-02-19 — Plan 03-02 complete: list_message_ids() with nextPageToken loop, 7 tests pass (RED+GREEN TDD)
 
-Progress: [#######░░░] 65%
+Progress: [#######░░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 3 min
-- Total execution time: 0.17 hours
+- Total plans completed: 8
+- Average duration: 2 min
+- Total execution time: 0.25 hours
 
 **By Phase:**
 
@@ -29,10 +29,10 @@ Progress: [#######░░░] 65%
 |-------|-------|-------|----------|
 | 01-foundation | 3 | 11 min | 4 min |
 | 02-cli-and-dry-run | 3 | 8 min | 2.7 min |
-| 03-message-discovery | 1 | 1 min | 1 min |
+| 03-message-discovery | 2 | 2 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-03 (5 min), 02-01 (1 min), 02-02 (2 min), 02-03 (~5 min), 03-01 (1 min)
+- Last 5 plans: 02-01 (1 min), 02-02 (2 min), 02-03 (~5 min), 03-01 (1 min), 03-02 (1 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -60,6 +60,9 @@ Recent decisions affecting current work:
 - [03-01]: build_gmail_query emits before:{epoch} integer format — eliminates date-string tz ambiguity for Gmail queries
 - [03-01]: months_ago_to_cutoff uses datetime.now().astimezone() — local tz, consistent with parse_date_to_cutoff
 - [03-01]: timezone import removed from date_utils.py — astimezone() with no args attaches local tz
+- [03-02]: list_message_ids() replaces both count_messages() and list_messages() stub — callers use len() for count
+- [03-02]: HttpError kept as noqa re-export in gmail_client.py — Phase 4 callers import it from here
+- [03-02]: TDD RED phase was ImportError (function not found) — valid RED, plan executed exactly as specified
 - [Phase 02-cli-and-dry-run]: count_messages() uses maxResults=500 single-call — approximate count, Phase 3 adds full pagination
 - [Phase 02-cli-and-dry-run]: validate_date() is a Typer callback on --before, triggers exit 2 (Typer protocol) not exit 1
 - [Phase 02-cli-and-dry-run]: Cancel via N confirmation or Ctrl-C exits 0 — user intent, not an error condition
@@ -77,5 +80,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 03-01-PLAN.md — date_utils upgraded: local-tz cutoffs, before:{epoch} Gmail queries, all 13 tests pass
+Stopped at: Completed 03-02-PLAN.md — list_message_ids() TDD complete: 7 tests pass (RED+GREEN), count_messages removed
 Resume file: None
