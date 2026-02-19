@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-19)
 
 **Core value:** Delete old Gmail messages reliably from the command line — with a dry-run preview before committing to deletion.
-**Current focus:** Phase 3 — Pagination and List (Plan 03-03 complete — Phase 3 done)
+**Current focus:** Phase 4 — Deletion (Plan 04-01 complete — batch_delete implemented)
 
 ## Current Position
 
-Phase: 3 of 4 complete (Message Discovery)
-Plan: 3 of 3 in phase 03 complete (03-03 main.py integration with spinner and exact count)
-Status: Phase 3 complete — all plans done; Phase 4 (deletion) is next
-Last activity: 2026-02-19 — Plan 03-03 complete: main.py wired with paginated fetch, Rich spinner, exact count display, local-timezone timestamp; verified live against Gmail
+Phase: 4 of 4 in progress (Deletion)
+Plan: 1 of 1 in phase 04 complete (04-01 batch_delete with chunked batchDelete, retry, and progress)
+Status: Phase 4 in progress — plan 04-01 done; remaining Phase 4 plans next
+Last activity: 2026-02-19 — Plan 04-01 complete: batch_delete() implemented with 500-ID chunks, exponential backoff retry on {429,500,502,503,504}, Rich progress bar; all 6 unit tests pass, full suite 26/26
 
-Progress: [##########] 100% Phase 3 (9 of 10 total plans complete)
+Progress: [##########] 100% Phase 4 Plan 1 (10 of 10 total plans complete)
 
 ## Performance Metrics
 
@@ -30,9 +30,10 @@ Progress: [##########] 100% Phase 3 (9 of 10 total plans complete)
 | 01-foundation | 3 | 11 min | 4 min |
 | 02-cli-and-dry-run | 3 | 8 min | 2.7 min |
 | 03-message-discovery | 3 | ~17 min | ~5.7 min |
+| 04-deletion | 1 | 1 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (2 min), 02-03 (~5 min), 03-01 (1 min), 03-02 (1 min), 03-03 (~15 min)
+- Last 5 plans: 02-03 (~5 min), 03-01 (1 min), 03-02 (1 min), 03-03 (~15 min), 04-01 (1 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -70,6 +71,10 @@ Recent decisions affecting current work:
 - [Phase 02-cli-and-dry-run]: validate_date() is a Typer callback on --before, triggers exit 2 (Typer protocol) not exit 1
 - [Phase 02-cli-and-dry-run]: Cancel via N confirmation or Ctrl-C exits 0 — user intent, not an error condition
 - [02-03]: Plan 02-03 is verification-only — no code changes required or made; all 4 live tests passed on first attempt
+- [04-01]: Import HttpError directly in cleaner.py — not via gmail_client re-export; cleaner.py owns deletion logic
+- [04-01]: Sleep AFTER failure, not before first attempt — avoids unnecessary delay on success path
+- [04-01]: batchDelete return value is None — not inspected; deleted count tracked via len(chunk) per successful execute() call
+- [04-01]: int(exc.resp.status) cast is mandatory — httplib2 returns resp.status as a string, numeric comparison requires explicit cast
 
 ### Pending Todos
 
@@ -83,5 +88,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 03-03-PLAN.md — Phase 3 complete: main.py wired with paginated fetch, Rich spinner, exact count, local-tz timestamp; all 4 live tests passed
+Stopped at: Completed 04-01-PLAN.md — batch_delete() implemented with chunked batchDelete, exponential backoff retry, Rich progress bar; 26/26 tests pass
 Resume file: None
