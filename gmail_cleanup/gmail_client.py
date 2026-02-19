@@ -1,28 +1,30 @@
-"""Gmail API operations — count implemented in Phase 2, list/delete in Phase 3/4."""
+"""Gmail API operations — message discovery in Phase 3, deletion in Phase 4."""
 
-from googleapiclient.errors import HttpError
+from googleapiclient.errors import HttpError  # noqa: F401 — re-exported for callers
 
 
-def count_messages(service, query: str) -> int:
-    """Return approximate count of messages matching query (up to 500).
+def list_message_ids(service, query: str) -> list[str]:
+    """Return all message IDs matching query via paginated API calls.
 
-    Uses a single API call with maxResults=500 — does not paginate.
-    Phase 3 will replace this with full pagination for accurate counts over 500.
+    Uses nextPageToken loop with maxResults=500 per page. Returns every
+    matching message ID — no silent truncation. Raises HttpError on API failure.
 
     Args:
         service: Authenticated Gmail API service object from build_gmail_service().
         query: Gmail search query string (e.g. "before:2024/01/01").
 
     Returns:
-        Number of matching messages found (0-500).
+        Flat list of all matching message ID strings.
     """
-    result = service.users().messages().list(
-        userId="me", q=query, maxResults=500
-    ).execute()
-    messages = result.get("messages", [])
-    return len(messages)
-
-
-def list_messages(service, query: str, max_results: int = 500) -> list[dict]:
-    """Return list of message dicts matching query. Stub — Phase 3."""
-    raise NotImplementedError("Implemented in Phase 3")
+    ids: list[str] = []
+    page_token = None
+    while True:
+        kwargs: dict = {"userId": "me", "q": query, "maxResults": 500}
+        if page_token:
+            kwargs["pageToken"] = page_token
+        result = service.users().messages().list(**kwargs).execute()
+        ids.extend(m["id"] for m in result.get("messages", []))
+        page_token = result.get("nextPageToken")
+        if not page_token:
+            break
+    return ids
